@@ -169,6 +169,75 @@ def install_fonts
   puts
 end
 
+def install_prezto
+  puts
+  puts 'Installing Prezto (ZSH Enhancements)...'
 
+  run %( ln -nfs "$HOME/.dotfiles/zsh/prezto" "${ZDOTDIR:-$HOME}/.zprezto" )
 
-UnsupportedOsError < StandardError; end
+  # The prezto runcoms are only going to be installed if zprezto has never been installed
+  install_files(Dir.glob('zsh/prezto/runcoms/z*'), :symlink)
+
+  puts
+  puts "Overriding prezto ~/.zpreztorc with dotfiles' zpreztorc to enable additional modules..."
+  run %( ln -nfs "$HOME/.dotfiles/zsh/prezto-override/zpreztorc" "${ZDOTDIR:-$HOME}/.zpreztorc" )
+
+  puts
+  puts 'Creating directories for your customizations'
+  run %( mkdir -p $HOME/.zsh.before )
+  run %( mkdir -p $HOME/.zsh.after )
+  run %( mkdir -p $HOME/.zsh.prompts )
+
+  if (ENV['SHELL']).to_s.include? 'zsh'
+    puts 'Zsh is already configured as your shell of choice. Restart your session to load the new settings'
+  else
+    puts 'Setting zsh as your default shell'
+    if File.exist?('/usr/local/bin/zsh')
+      if File.readlines('/private/etc/shells').grep('/usr/local/bin/zsh').empty?
+        puts 'Adding zsh to standard shell list'
+        run %( echo "/usr/local/bin/zsh" | sudo tee -a /private/etc/shells )
+      end
+      run %( chsh -s /usr/local/bin/zsh )
+    else
+      run %( chsh -s /bin/zsh )
+    end
+  end
+end
+
+def install_files(files, method = :symlink)
+  files.each do |f|
+    file = f.split('/').last
+    source = "#{ENV['PWD']}/#{f}"
+    target = "#{ENV['HOME']}/.#{file}"
+
+    puts "======================#{file}=============================="
+    puts "Source: #{source}"
+    puts "Target: #{target}"
+
+    if File.exist?(target) && (!File.symlink?(target) || (File.symlink?(target) && File.readlink(target) != source))
+      puts "[Overwriting] #{target}...leaving original at #{target}.backup..."
+      run %( mv "$HOME/.#{file}" "$HOME/.#{file}.backup" )
+    end
+
+    if method == :symlink
+      run %( ln -nfs "#{source}" "#{target}" )
+    else
+      run %( cp -f "#{source}" "#{target}" )
+    end
+
+    # Temporary solution until we find a way to allow customization
+    # This modifies zshrc to load all of dotfiles' zsh extensions.
+    # Eventually dotfiles' zsh extensions should be ported to prezto modules.
+    source_config_code = 'for config_file ($HOME/.dotfiles/zsh/*.zsh) source $config_file'
+    if file == 'zshrc'
+      File.open(target, 'a+') do |zshrc|
+        if zshrc.readlines.grep(/#{Regexp.escape(source_config_code)}/).empty?
+          zshrc.puts(source_config_code)
+        end
+      end
+    end
+
+    puts '=========================================================='
+    puts
+  end
+end
