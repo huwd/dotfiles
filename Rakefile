@@ -22,6 +22,10 @@ task install: %i[submodule_init submodules] do
     install_files(Dir.glob('irb/*'))
   end
 
+  if want_to_install?('rubygems config (faster/no docs)')
+    install_files(Dir.glob('ruby/*'))
+  end
+
 
   Rake::Task['install_prezto'].execute
 
