@@ -14,26 +14,10 @@ task install: %i[submodule_init submodules] do
   install_dependencies
 
   # this has all the runcoms from this directory.
-  # if want_to_install?('git configs (color, aliases)')
-  #   install_files(Dir.glob('git/*'))
-  # end
-  # if want_to_install?('irb/pry configs (more colorful)')
-  #   install_files(Dir.glob('irb/*'))
-  # end
-  # if want_to_install?('rubygems config (faster/no docs)')
-  #   install_files(Dir.glob('ruby/*'))
-  # end
-  # if want_to_install?('ctags config (better js/ruby support)')
-  #   install_files(Dir.glob('ctags/*'))
-  # end
-  # install_files(Dir.glob('tmux/*')) if want_to_install?('tmux config')
-  # if want_to_install?('vimification of command line tools')
-  #   install_files(Dir.glob('vimify/*'))
-  # end
-  # if want_to_install?('vim configuration (highly recommended)')
-  #   install_files(Dir.glob('{vim,vimrc}'))
-  #   Rake::Task['install_vundle'].execute
-  # end
+  if want_to_install?('git configs (color, aliases)')
+    install_files(Dir.glob('git/*'))
+  end
+
 
   Rake::Task['install_prezto'].execute
 
