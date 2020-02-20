@@ -241,3 +241,16 @@ def install_files(files, method = :symlink)
     puts
   end
 end
+
+def success_msg(action)
+  puts ''
+  puts '  _____        _    __ _ _             '
+  puts ' |  __ \      | |  / _(_) |            '
+  puts ' | |  | | ___ | |_| |_ _| | ___  ___   '
+  puts ' | |  | |/ _ \| __|  _| | |/ _ \/ __|  '
+  puts ' | |__| | (_) | |_| | | | |  __/\__ \  '
+  puts ' |_____/ \___/ \__|_| |_|_|\___||___/  '
+  puts '                                       '
+  puts ''
+  puts "Dotfiles have been #{action}. Please restart your terminal and vim."
+end
