@@ -95,20 +95,21 @@ def want_to_install? (section)
   end
 end
 
-def is_mac?
-  os_type == "mac"
+def mac?
+  os_type == 'mac'
 end
 
-def is_linux?
-  os_type == "linux"
+def linux?
+  os_type == 'linux'
 end
 
 def os_type
-  platform = RUBY_PLATFORM.downcase 
-  return "mac" if platform.include?("darwin")
-  return "linux" if platform.inclue("linux")
-  raise UnsupportedOsError
-endnd
+  platform = RUBY_PLATFORM.downcase
+  return 'mac' if platform.include?('darwin')
+  return 'linux' if platform.include?('linux')
+
+  raise 'Fatal unsupported operating system'
+end
 
 def install_dependencies
   puts
