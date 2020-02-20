@@ -27,17 +27,6 @@ alias -g S='| sort'
 alias -g G='| grep' # now you can do: ls foo G something
 ```
 
-zvm.zsh
--------
-
-```zsh
-# Use zmv, which is amazing
-autoload -U zmv
-alias zmv="noglob zmv -W"
-```
-
-> is zmv amazing? why, what does it do?
-
 0_path.zsh
 ----------
 
