@@ -18,6 +18,10 @@ task install: %i[submodule_init submodules] do
     install_files(Dir.glob('git/*'))
   end
 
+  if want_to_install?('irb/pry configs (more colorful)')
+    install_files(Dir.glob('irb/*'))
+  end
+
 
   Rake::Task['install_prezto'].execute
 
