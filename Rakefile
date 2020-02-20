@@ -86,8 +86,8 @@ def run(cmd)
   system cmd.to_s unless ENV['DEBUG']
 end
 
-def want_to_install? (section)
-  if ENV["ASK"]=="true"
+def want_to_install?(section)
+  if ENV['ASK'] == 'true'
     puts "Would you like to install configuration files for: #{section}? [y]es, [n]o"
     STDIN.gets.chomp == 'y'
   else
