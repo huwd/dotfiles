@@ -1,53 +1,75 @@
+# frozen_string_literal: true
+
 require 'rake'
 require 'fileutils'
 
-desc "Hook our dotfiles into system-standard positions."
-task :install => [:submodule_init, :submodules] do
+desc 'Hook our dotfiles into system-standard positions.'
+# task install: %i[submodule_init submodules] do
+task :install do
   puts
-  puts "======================================================"
-  puts "Welcome to Dotfiles Installation."
-  puts "======================================================"
+  puts '======================================================'
+  puts 'Welcome to Dotfiles Installation.'
+  puts '======================================================'
   puts
 
-  install_homebrew if RUBY_PLATFORM.downcase.include?("darwin")
-  install_rvm_binstubs
+  install_dependencies
 
   # this has all the runcoms from this directory.
-  install_files(Dir.glob('git/*')) if want_to_install?('git configs (color, aliases)')
-  install_files(Dir.glob('irb/*')) if want_to_install?('irb/pry configs (more colorful)')
-  install_files(Dir.glob('ruby/*')) if want_to_install?('rubygems config (faster/no docs)')
-  install_files(Dir.glob('ctags/*')) if want_to_install?('ctags config (better js/ruby support)')
-  install_files(Dir.glob('tmux/*')) if want_to_install?('tmux config')
-  install_files(Dir.glob('vimify/*')) if want_to_install?('vimification of command line tools')
-  if want_to_install?('vim configuration (highly recommended)')
-    install_files(Dir.glob('{vim,vimrc}'))
-    Rake::Task["install_vundle"].execute
-  end
+  # if want_to_install?('git configs (color, aliases)')
+  #   install_files(Dir.glob('git/*'))
+  # end
+  # if want_to_install?('irb/pry configs (more colorful)')
+  #   install_files(Dir.glob('irb/*'))
+  # end
+  # if want_to_install?('rubygems config (faster/no docs)')
+  #   install_files(Dir.glob('ruby/*'))
+  # end
+  # if want_to_install?('ctags config (better js/ruby support)')
+  #   install_files(Dir.glob('ctags/*'))
+  # end
+  # install_files(Dir.glob('tmux/*')) if want_to_install?('tmux config')
+  # if want_to_install?('vimification of command line tools')
+  #   install_files(Dir.glob('vimify/*'))
+  # end
+  # if want_to_install?('vim configuration (highly recommended)')
+  #   install_files(Dir.glob('{vim,vimrc}'))
+  #   Rake::Task['install_vundle'].execute
+  # end
 
-  Rake::Task["install_prezto"].execute
+  Rake::Task['install_prezto'].execute
 
   install_fonts
+  install_term_theme
 
-  install_term_theme if RUBY_PLATFORM.downcase.include?("darwin")
+  # run_bundle_config
 
-  run_bundle_config
-
-  success_msg("installed")
+  success_msg('installed')
 end
+
+task :install_prezto do
+  install_prezto if want_to_install?('zsh enhancements & prezto')
+end
+
+task default: 'install'
 
 private
 
-
-
 DEPENDENCIES = {
-  "any": [
-    "zsh",
-    "tmux",
-    "git"
+  all: %w[
+    zsh
+    tmux
+    git
+    wget
+    curl
   ],
-  "mac": [],
-  "linux": []
-}
+  mac: ['macvim'],
+  linux: %w[
+    neovim
+    dconf-cli
+    fontconfig
+  ]
+}.freeze
+
 ## @TODO consider adding:
 # ctags
 # hub
@@ -56,7 +78,7 @@ DEPENDENCIES = {
 # ghi
 
 def platform_deps
-  DEPENDENCIES['any'].concat(DEPENDENCIES[os_type]).uniq
+  DEPENDENCIES[:all].concat(DEPENDENCIES[os_type.to_sym]).uniq.join(' ')
 end
 
 def run(cmd)
