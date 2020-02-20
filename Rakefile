@@ -4,8 +4,7 @@ require 'rake'
 require 'fileutils'
 
 desc 'Hook our dotfiles into system-standard positions.'
-# task install: %i[submodule_init submodules] do
-task :install do
+task install: %i[submodule_init submodules] do
   puts
   puts '======================================================'
   puts 'Welcome to Dotfiles Installation.'
@@ -44,6 +43,26 @@ task :install do
   # run_bundle_config
 
   success_msg('installed')
+end
+
+task :submodule_init do
+  run %( git submodule update --init --recursive ) unless ENV['SKIP_SUBMODULES']
+end
+
+desc 'Init and update submodules.'
+task :submodules do
+  unless ENV['SKIP_SUBMODULES']
+    puts '======================================================'
+    puts 'Downloading Dotfiles submodules...please wait'
+    puts '======================================================'
+
+    run %(
+      cd $HOME/.dotfiles
+      git submodule update --recursive
+      git clean -df
+    )
+    puts
+  end
 end
 
 task :install_prezto do
