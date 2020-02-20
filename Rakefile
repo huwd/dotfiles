@@ -83,7 +83,7 @@ end
 
 def run(cmd)
   puts "[Running] #{cmd}"
-  system "#{cmd}" unless ENV['DEBUG']
+  system cmd.to_s unless ENV['DEBUG']
 end
 
 def want_to_install? (section)
