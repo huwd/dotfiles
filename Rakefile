@@ -28,6 +28,10 @@ task install: %i[submodule_init submodules] do
 
   install_files(Dir.glob('tmux/*')) if want_to_install?('tmux config')
 
+  if want_to_install?('vimification of command line tools')
+    install_files(Dir.glob('vimify/*'))
+  end
+
   Rake::Task['install_prezto'].execute
 
   install_fonts
