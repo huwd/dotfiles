@@ -145,9 +145,6 @@ if [ $MACVIM_INSTALLED -eq 0 ]; then
   alias vim="mvim -v"
 fi
 
-# mimic vim functions
-alias :q='exit'
-
 # vimrc editing
 alias ve='vim ~/.vimrc'
 
