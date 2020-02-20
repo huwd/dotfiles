@@ -112,55 +112,50 @@ def os_type
 end
 
 def install_dependencies
-  puts
-  puts
-  if is_mac? do
-    puts "======================================================"
-    puts "Updating Homebrew."
-    puts "======================================================"
-    run "brew update"
-    puts
-    puts
-    puts "======================================================"
-    puts "Installing Homebrew packages...There may be some warnings."
-    puts "======================================================"
-    run "brew install #{platform_deps}"
-    run "brew install macvim"
-  end
-  if is_linux? do
-    puts "======================================================"
-    puts "Updating Packages (apt)."
-    puts "======================================================"
-    run "apt update"
-    puts
-    puts
-    puts "======================================================"
-    puts "Installing apt packages...There may be some warnings."
-    puts "======================================================"
-    run "apt install #{playform_deps}"
-    run "apt install neovim"
-  end
+  update_mac_deps if mac?
+  update_linux_deps if linux?
   puts
   puts
 end
 
+def update_linux_deps
+  puts '======================================================'
+  puts 'Updating Packages (apt).'
+  puts '======================================================'
+  run 'apt-get update'
+  puts
+  puts
+  puts '======================================================'
+  puts 'Installing apt packages...There may be some warnings.'
+  puts '======================================================'
+  run "apt-get install -yqq #{platform_deps}"
+  run 'apt-get install -yqq neovim'
+end
+
+def update_mac_deps
+  install_homebrew
+  puts '======================================================'
+  puts 'Updating Homebrew.'
+  puts '======================================================'
+  run 'brew update'
+  puts
+  puts
+  puts '======================================================'
+  puts 'Installing Homebrew packages...There may be some warnings.'
+  puts '======================================================'
+  run "brew install #{platform_deps}"
+  run 'brew install macvim'
+end
+
 def install_homebrew
-  run %{which brew}
-  unless $?.success?
-    puts "======================================================"
-    puts "Installing Homebrew, the OSX package manager...If it's"
-    puts "already installed, this will do nothing."
-    puts "======================================================"
-    run %{ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"}
-  end
-  puts
-  puts
-  puts "======================================================"
-  puts "Updating Homebrew."
-  puts "======================================================"
-  run %{brew update}
-  puts
-  puts
+  run %(which brew)
+  return if $CHILD_STATUS.success?
+
+  puts '======================================================'
+  puts "Installing Homebrew, the OSX package manager...If it's"
+  puts 'already installed, this will do nothing.'
+  puts '======================================================'
+  run %{ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"}
 end
 
 def install_fonts
