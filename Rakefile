@@ -159,11 +159,13 @@ def install_homebrew
 end
 
 def install_fonts
-  puts "======================================================"
-  puts "Installing patched fonts for Powerline/Lightline."
-  puts "======================================================"
-  run %{ cp -f $HOME/.dotfiles/fonts/* $HOME/Library/Fonts } if is_mac?
-  run %{ mkdir -p ~/.fonts && cp ~/.dotfiles/fonts/* ~/.fonts && fc-cache -vf ~/.fonts } if is_linux?
+  puts '======================================================'
+  puts 'Installing patched fonts for Powerline/Lightline.'
+  puts '======================================================'
+  run %( cp -f $HOME/.dotfiles/fonts/* $HOME/Library/Fonts ) if mac?
+  if linux?
+    run %( mkdir -p ~/.fonts && cp ~/.dotfiles/fonts/* ~/.fonts && fc-cache -vf ~/.fonts )
+  end
   puts
 end
 
