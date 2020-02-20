@@ -27,3 +27,9 @@ fi
 # show me files matching "ls grep"
 alias lsg='ll | grep'
 
+# Git Aliases
+alias gs='git status'
+alias glg='git l'
+alias gps='git push'
+alias gpsh='git push -u origin `git rev-parse --abbrev-ref HEAD`'
+
