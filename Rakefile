@@ -204,6 +204,39 @@ def install_prezto
   end
 end
 
+def install_term_theme
+  install_theme_linux_term if linux?
+  install_theme_iterm if mac?
+end
+
+def install_theme_linux_term
+  puts '======================================================'
+  puts 'Installing Terminal solarized theme.'
+  puts '======================================================'
+  run %(git clone https://github.com/huwd/gnome-terminal-colors-solarized.git)
+  run %(./gnome-terminal-colors-solarized/set_dark.sh)
+  run %(rm -rf gnome-terminal-colors-solarized)
+end
+
+def install_theme_iterm
+  puts '======================================================'
+  puts 'Installing iTerm2 solarized theme.'
+  puts '======================================================'
+  run %( /usr/libexec/PlistBuddy -c "Add :'Custom Color Presets':'Solarized Light' dict" ~/Library/Preferences/com.googlecode.iterm2.plist )
+  run %( /usr/libexec/PlistBuddy -c "Merge 'iTerm2/Solarized Light.itermcolors' :'Custom Color Presets':'Solarized Light'" ~/Library/Preferences/com.googlecode.iterm2.plist )
+  run %( /usr/libexec/PlistBuddy -c "Add :'Custom Color Presets':'Solarized Dark' dict" ~/Library/Preferences/com.googlecode.iterm2.plist )
+  run %( /usr/libexec/PlistBuddy -c "Merge 'iTerm2/Solarized Dark.itermcolors' :'Custom Color Presets':'Solarized Dark'" ~/Library/Preferences/com.googlecode.iterm2.plist )
+  # If iTerm2 is not installed or has never run, we can't autoinstall the profile since the plist is not there
+  unless File.exist?(File.join(ENV['HOME'], '/Library/Preferences/com.googlecode.iterm2.plist'))
+    puts '======================================================'
+    puts 'To make sure your profile is using the solarized theme'
+    puts 'Please check your settings under:'
+    puts 'Preferences> Profiles> [your profile]> Colors> Load Preset..'
+    puts '======================================================'
+    nil
+  end
+end
+
 def install_files(files, method = :symlink)
   files.each do |f|
     file = f.split('/').last
