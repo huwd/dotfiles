@@ -12,3 +12,7 @@ elif [[ $unamestr == 'Darwin' ]]; then
   platform='darwin'
 fi
 
+# Show human friendly numbers and colors
+alias df='df -h'
+alias du='du -h -d 2'
+
