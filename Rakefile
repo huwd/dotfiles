@@ -26,6 +26,7 @@ task install: %i[submodule_init submodules] do
     install_files(Dir.glob('ruby/*'))
   end
 
+  install_files(Dir.glob('tmux/*')) if want_to_install?('tmux config')
 
   Rake::Task['install_prezto'].execute
 
