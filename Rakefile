@@ -42,8 +42,7 @@ task install: %i[submodule_init submodules] do
 
   install_fonts
   install_term_theme
-
-  # run_bundle_config
+  run_bundle_config
 
   success_msg('installed')
 end
@@ -344,11 +343,25 @@ def install_files(files, method = :symlink, load_zsh=true)
           zshrc.puts(source_config_code)
         end
       end
-    end
+def run_bundle_config
+  return unless system("which bundle")
 
-    puts '=========================================================='
-    puts
+  bundler_jobs = number_of_cores - 1
+  puts "======================================================"
+  puts "Configuring Bundlers for parallel gem installation"
+  puts "======================================================"
+  run %{ bundle config --global jobs #{bundler_jobs} }
+  puts
+end
+
+def number_of_cores
+  if RUBY_PLATFORM.downcase.include?("darwin")
+    cores = run %{ sysctl -n hw.ncpu }
+  else
+    cores = run %{ nproc }
   end
+  puts
+  cores.to_i
 end
 
 def success_msg(action)
