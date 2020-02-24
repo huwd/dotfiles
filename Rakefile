@@ -197,7 +197,6 @@ def update_mac_deps
   puts 'Installing Homebrew packages...There may be some warnings.'
   puts '======================================================'
   run "brew install #{platform_deps}"
-  run 'brew install macvim'
 end
 
 def install_homebrew
