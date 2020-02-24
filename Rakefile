@@ -200,8 +200,7 @@ def update_mac_deps
 end
 
 def install_homebrew
-  run %(which brew)
-  return if $CHILD_STATUS.success?
+  return if run %(which brew)
 
   puts '======================================================'
   puts "Installing Homebrew, the OSX package manager...If it's"
@@ -351,9 +350,9 @@ end
 
 def number_of_cores
   if RUBY_PLATFORM.downcase.include?("darwin")
-    cores = run %{ sysctl -n hw.ncpu }
+    cores = `sysctl -n hw.ncpu`.chomp
   else
-    cores = run %{ nproc }
+    cores = `nproc`.chomp
   end
   puts
   cores.to_i
