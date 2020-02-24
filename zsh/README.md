@@ -187,6 +187,7 @@ alias gra='git rebase --abort'
 alias ggrc='git rebase --continue'
 alias gbi='git rebase --interactive'
 alias gl='git l'
+alias glg="git log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue <%an>%Creset' --abbrev-commit --branches"
 alias glog='git l'
 alias co='git co'
 alias gf='git fetch'
