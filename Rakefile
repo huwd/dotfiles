@@ -83,10 +83,10 @@ DEPENDENCIES = {
     wget
     curl
     rbenv
-  ],
-  mac: ['macvim'],
-  linux: %w[
     neovim
+  ],
+  mac: [''],
+  linux: %w[
     dconf-cli
     fontconfig
   ]
@@ -184,7 +184,6 @@ def update_linux_deps
   puts 'Installing apt packages...There may be some warnings.'
   puts '======================================================'
   run "apt-get install -yqq #{platform_deps}"
-  run 'apt-get install -yqq neovim'
 end
 
 def update_mac_deps
