@@ -32,6 +32,11 @@ task install: %i[submodule_init submodules] do
     install_files(Dir.glob('vimify/*'))
   end
 
+  if work_customisations? && want_to_install("work customisations (#{supported_workplaces.join(' ')})")
+    workplace = select_a_workplace_to_install
+    install_files(Dir.glob(Dir["work/#{workplace}/*"]))
+  end
+
   Rake::Task['install_prezto'].execute
 
   install_fonts
@@ -93,6 +98,18 @@ DEPENDENCIES = {
 # the_silver_searcher
 # ghi
 
+def work_directories
+  Dir["work/*"]
+end
+
+def work_customisations?
+  !work_directories.empty?
+end
+
+def supported_workplaces
+  Dir["work/*"].map do { |work_dir| work_dir.split('/')[1] }
+end
+
 def platform_deps
   DEPENDENCIES[:all].concat(DEPENDENCIES[os_type.to_sym]).uniq.join(' ')
 end
@@ -100,6 +117,27 @@ end
 def run(cmd)
   puts "[Running] #{cmd}"
   system cmd.to_s unless ENV['DEBUG']
+end
+
+def select_a_workplace_to_install
+  return supported_workplaces[0] if supported_workplaces.count == 1
+end
+
+def multiple_choice(choices)
+  if ENV['ASK'] == 'true'
+    choice_made = false
+    puts "Which workplace would you like to install configuration files for: "
+    puts "Select a number 1 to #{choices.count}"
+    until choice_made
+      choices.each_with_index { |potential_choice, i| puts "  #{i+1}) #{potential_choice}"}
+      choice = STDIN.gets.chomp
+      return choices[choice - 1] if (1..choices.count).include? STDIN.gets.chomp
+      puts "Choice not recognised, try again"
+      puts
+    end
+  else
+    ENV['WORK_DEFAULT']
+  end
 end
 
 def want_to_install?(section)
