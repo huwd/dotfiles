@@ -112,6 +112,13 @@ aliases.zsh
 -----------
 
 ```zsh
+# TODOS
+# This uses NValt (NotationalVelocity alt fork) - http://brettterpstra.com/project/nvalt/
+# to find the note called 'todo'
+alias todo='open nvalt://find/todo'
+```
+
+```zsh
 # YADR support
 alias yav='yadr vim-add-plugin'
 alias ydv='yadr vim-delete-plugin'
