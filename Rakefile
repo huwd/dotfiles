@@ -32,9 +32,10 @@ task install: %i[submodule_init submodules] do
     install_files(Dir.glob('vimify/*'))
   end
 
-  if work_customisations? && want_to_install("work customisations (#{supported_workplaces.join(' ')})")
+  if work_customisations? && want_to_install?("work customisations (#{supported_workplaces.join(' ')})")
     workplace = select_a_workplace_to_install
-    install_files(Dir.glob(Dir["work/#{workplace}/*"]))
+    install_files(Dir.glob("work/#{workplace}/*"), load_zsh=false)
+    load_zsh_extensions("work/#{workplace}/*.zsh")
   end
 
   Rake::Task['install_prezto'].execute
@@ -99,7 +100,7 @@ DEPENDENCIES = {
 # ghi
 
 def work_directories
-  Dir["work/*"]
+  Dir.glob("work/*")
 end
 
 def work_customisations?
@@ -107,7 +108,7 @@ def work_customisations?
 end
 
 def supported_workplaces
-  Dir["work/*"].map do { |work_dir| work_dir.split('/')[1] }
+  work_directories.map { |work_dir| work_dir.split('/')[1] }
 end
 
 def platform_deps
@@ -297,7 +298,22 @@ def install_theme_iterm
   end
 end
 
-def install_files(files, method = :symlink)
+# Temporary solution until we find a way to allow customization
+# This modifies zshrc to load all of dotfiles' zsh extensions.
+# Eventually dotfiles' zsh extensions should be ported to prezto modules.
+def load_zsh_extensions(path="$HOME/.dotfiles/zsh/*.zsh")
+  source_config_code = "for config_file (#{path}) source $config_file"
+  if file == 'zshrc'
+    File.open(target, 'a+') do |zshrc|
+      if zshrc.readlines.grep(/#{Regexp.escape(source_config_code)}/).empty?
+        zshrc.puts(source_config_code)
+      end
+    end
+  end
+end
+
+
+def install_files(files, method = :symlink, load_zsh=true)
   files.each do |f|
     file = f.split('/').last
     source = "#{ENV['PWD']}/#{f}"
