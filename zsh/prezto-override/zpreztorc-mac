@@ -34,7 +34,7 @@ zstyle ':prezto:load' pmodule \
   'completion' \
   'git' \
   'gpg' \
-  'osx` \
+  'osx' \
   'ruby' \
   'syntax-highlighting' \
   'history-substring-search' \
