@@ -313,25 +313,27 @@ def install_files(files, method = :symlink)
     source = "#{ENV['PWD']}/#{f}"
     target = "#{ENV['HOME']}/.#{file}"
 
-    puts "======================#{file}=============================="
-    puts "Source: #{source}"
-    puts "Target: #{target}"
+    unless file == "README.md"
+      puts "======================#{file}=============================="
+      puts "Source: #{source}"
+      puts "Target: #{target}"
 
-    if File.exist?(target) && (!File.symlink?(target) || (File.symlink?(target) && File.readlink(target) != source))
-      puts "[Overwriting] #{target}...leaving original at #{target}.backup..."
-      run %( mv "$HOME/.#{file}" "$HOME/.#{file}.backup" )
+      if File.exist?(target) && (!File.symlink?(target) || (File.symlink?(target) && File.readlink(target) != source))
+        puts "[Overwriting] #{target}...leaving original at #{target}.backup..."
+        run %( mv "$HOME/.#{file}" "$HOME/.#{file}.backup" )
+      end
+
+      if method == :symlink
+        run %( ln -nfs "#{source}" "#{target}" )
+      else
+        run %( cp -f "#{source}" "#{target}" )
+      end
+
+      load_zsh_extensions
+
+      puts '=========================================================='
+      puts
     end
-
-    if method == :symlink
-      run %( ln -nfs "#{source}" "#{target}" )
-    else
-      run %( cp -f "#{source}" "#{target}" )
-    end
-
-    load_zsh_extensions
-
-    puts '=========================================================='
-    puts
   end
 end
 
