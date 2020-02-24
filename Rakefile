@@ -34,8 +34,7 @@ task install: %i[submodule_init submodules] do
 
   if work_customisations? && want_to_install?("work customisations (#{supported_workplaces.join(' ')})")
     workplace = select_a_workplace_to_install
-    install_files(Dir.glob("work/#{workplace}/*"), load_zsh=false)
-    load_zsh_extensions("work/#{workplace}/*.zsh")
+    install_files(Dir.glob("work/#{workplace}/*"))
   end
 
   Rake::Task['install_prezto'].execute
@@ -312,7 +311,7 @@ def load_zsh_extensions(path="$HOME/.dotfiles/zsh/*.zsh")
 end
 
 
-def install_files(files, method = :symlink, load_zsh=true)
+def install_files(files, method = :symlink)
   files.each do |f|
     file = f.split('/').last
     source = "#{ENV['PWD']}/#{f}"
@@ -333,7 +332,7 @@ def install_files(files, method = :symlink, load_zsh=true)
       run %( cp -f "#{source}" "#{target}" )
     end
 
-    load_zsh_extensions if load_zsh
+    load_zsh_extensions
 
     puts '=========================================================='
     puts
