@@ -196,7 +196,7 @@ def install_prezto
 
   puts
   puts "Overriding prezto ~/.zpreztorc with dotfiles' zpreztorc to enable additional modules..."
-  run %( ln -nfs "$HOME/.dotfiles/zsh/prezto-override/zpreztorc" "${ZDOTDIR:-$HOME}/.zpreztorc" )
+  override_preztorc
 
   puts
   puts 'Creating directories for your customizations'
@@ -218,6 +218,12 @@ def install_prezto
       run %( chsh -s /bin/zsh )
     end
   end
+end
+
+def override_preztorc
+  system = ""
+  system = mac? ? "-mac" : "-linux"
+  run %( ln -nfs "$HOME/.dotfiles/zsh/prezto-override/zpreztorc" "${ZDOTDIR:-$HOME}/.zpreztorc#{system}" )
 end
 
 def install_term_theme
