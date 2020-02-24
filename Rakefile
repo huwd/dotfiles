@@ -256,9 +256,7 @@ def install_prezto
 end
 
 def override_preztorc
-  system = ""
-  system = mac? ? "-mac" : "-linux"
-  run %( ln -nfs "$HOME/.dotfiles/zsh/prezto-override/zpreztorc" "${ZDOTDIR:-$HOME}/.zpreztorc#{system}" )
+  run %( ln -nfs "$HOME/.dotfiles/zsh/prezto-override/zpreztorc-#{os_type}" "${ZDOTDIR:-$HOME}/.zpreztorc" )
 end
 
 def install_term_theme
