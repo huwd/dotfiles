@@ -82,6 +82,7 @@ DEPENDENCIES = {
     git
     wget
     curl
+    rbenv
   ],
   mac: ['macvim'],
   linux: %w[
