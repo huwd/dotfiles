@@ -5,7 +5,6 @@ require 'fileutils'
 
 desc 'Hook our dotfiles into system-standard positions.'
 task install: %i[submodule_init submodules] do
-  puts
   puts '======================================================'
   puts 'Welcome to Dotfiles Installation.'
   puts '======================================================'
