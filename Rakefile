@@ -2,6 +2,7 @@
 
 require 'rake'
 require 'fileutils'
+require File.join(File.dirname(__FILE__), 'bin', 'dotfiles', 'vundle')
 
 desc 'Hook our dotfiles into system-standard positions.'
 task install: %i[submodule_init submodules] do
