@@ -28,6 +28,7 @@ zstyle ':prezto:load' pmodule \
   'terminal' \
   'editor' \
   'history' \
+  'asdf' \
   'directory' \
   'spectrum' \
   'utility' \
