@@ -294,8 +294,10 @@ end
 # Temporary solution until we find a way to allow customization
 # This modifies zshrc to load all of dotfiles' zsh extensions.
 # Eventually dotfiles' zsh extensions should be ported to prezto modules.
-def load_zsh_extensions(path="$HOME/.dotfiles/zsh/*.zsh")
+def load_zsh_extensions(file, path="$HOME/.dotfiles/zsh/*.zsh")
   source_config_code = "for config_file (#{path}) source $config_file"
+  target = "#{ENV['HOME']}/.#{file}"
+
   if file == 'zshrc'
     File.open(target, 'a+') do |zshrc|
       if zshrc.readlines.grep(/#{Regexp.escape(source_config_code)}/).empty?
@@ -328,7 +330,7 @@ def install_files(files, method = :symlink)
         run %( cp -f "#{source}" "#{target}" )
       end
 
-      load_zsh_extensions
+      load_zsh_extensions(file)
 
       puts '=========================================================='
       puts
