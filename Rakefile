@@ -32,6 +32,11 @@ task install: %i[submodule_init submodules] do
     install_files(Dir.glob('vimify/*'))
   end
 
+  if want_to_install?('vim configuration (highly recommended)')
+    install_files(Dir.glob('{vim,vimrc}'))
+    Rake::Task["install_vundle"].execute
+  end
+
   if work_customisations? && want_to_install?("work customisations (#{supported_workplaces.join(' ')})")
     workplace = select_a_workplace_to_install
     install_files(Dir.glob("work/#{workplace}/*"))
@@ -45,6 +50,34 @@ task install: %i[submodule_init submodules] do
 
   success_msg('installed')
 end
+
+desc "Runs Vundle installer in a clean vim environment"
+task :install_vundle do
+  puts "======================================================"
+  puts "Installing and updating vundles."
+  puts "The installer will now proceed to run PluginInstall to install vundles."
+  puts "======================================================"
+  puts ""
+
+  vundle_path = File.join('vim','bundle', 'vundle')
+  unless File.exist?(vundle_path)
+    run %{
+      cd $HOME/.dotfiles
+      git clone https://github.com/gmarik/vundle.git #{vundle_path}
+    }
+  end
+
+  Vundle::update_vundle
+end
+
+desc 'Updates the installation'
+#TODO: for now, we do the same as install. But it would be nice
+#not to clobber zsh files
+task :update do
+  Rake::Task["vundle_migration"].execute if needs_migration_to_vundle?
+  Rake::Task["install"].execute
+end
+
 
 task :submodule_init do
   run %( git submodule update --init --recursive ) unless ENV['SKIP_SUBMODULES']
@@ -64,6 +97,25 @@ task :submodules do
     )
     puts
   end
+end
+
+desc "Performs migration from pathogen to vundle"
+task :vundle_migration do
+  puts "======================================================"
+  puts "Migrating from pathogen to vundle vim plugin manager. "
+  puts "This will move the old .vim/bundle directory to"
+  puts ".vim/bundle.old and replacing all your vim plugins with"
+  puts "the standard set of plugins. You will then be able to "
+  puts "manage your vim's plugin configuration by editing the "
+  puts "file .vim/vundles.vim"
+  puts "======================================================"
+
+  Dir.glob(File.join('vim', 'bundle','**')) do |sub_path|
+    run %{git config -f #{File.join('.git', 'config')} --remove-section submodule.#{sub_path}}
+    # `git rm --cached #{sub_path}`
+    FileUtils.rm_rf(File.join('.git', 'modules', sub_path))
+  end
+  FileUtils.mv(File.join('vim', 'bundle'), File.join('vim', 'bundle.old'))
 end
 
 task :install_prezto do
@@ -97,6 +149,10 @@ DEPENDENCIES = {
 # reattach-to-user-namespace
 # the_silver_searcher
 # ghi
+
+def needs_migration_to_vundle?
+  File.exist? File.join('vim', 'bundle', 'tpope-vim-pathogen')
+end
 
 def work_directories
   Dir.glob("work/*")
