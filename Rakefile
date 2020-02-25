@@ -128,13 +128,12 @@ private
 
 DEPENDENCIES = {
   all: %w[
-    zsh
-    tmux
-    git
-    wget
     curl
-    rbenv
+    git
     neovim
+    tmux
+    wget
+    zsh
   ],
   mac: [''],
   linux: %w[
