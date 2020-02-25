@@ -32,10 +32,10 @@ task install: %i[submodule_init submodules] do
     install_files(Dir.glob('vimify/*'))
   end
 
-  if want_to_install?('vim configuration (highly recommended)')
-    install_files(Dir.glob('{vim,vimrc}'))
-    Rake::Task["install_vundle"].execute
-  end
+  # if want_to_install?('nvim configuration (highly recommended)')
+  #   install_files(Dir.glob('{nvim,vimrc}'))
+  #   Rake::Task["install_vundle"].execute
+  # end
 
   if work_customisations? && want_to_install?("work customisations (#{supported_workplaces.join(' ')})")
     workplace = select_a_workplace_to_install
@@ -59,7 +59,7 @@ task :install_vundle do
   puts "======================================================"
   puts ""
 
-  vundle_path = File.join('vim','bundle', 'vundle')
+  vundle_path = File.join('nvim','bundle', 'vundle')
   unless File.exist?(vundle_path)
     run %{
       cd $HOME/.dotfiles
@@ -110,12 +110,12 @@ task :vundle_migration do
   puts "file .vim/vundles.vim"
   puts "======================================================"
 
-  Dir.glob(File.join('vim', 'bundle','**')) do |sub_path|
+  Dir.glob(File.join('nvim', 'bundle','**')) do |sub_path|
     run %{git config -f #{File.join('.git', 'config')} --remove-section submodule.#{sub_path}}
     # `git rm --cached #{sub_path}`
     FileUtils.rm_rf(File.join('.git', 'modules', sub_path))
   end
-  FileUtils.mv(File.join('vim', 'bundle'), File.join('vim', 'bundle.old'))
+  FileUtils.mv(File.join('nvim', 'bundle'), File.join('nvim', 'bundle.old'))
 end
 
 task :install_prezto do
@@ -150,7 +150,7 @@ DEPENDENCIES = {
 # ghi
 
 def needs_migration_to_vundle?
-  File.exist? File.join('vim', 'bundle', 'tpope-vim-pathogen')
+  File.exist? File.join('nvim', 'bundle', 'tpope-vim-pathogen')
 end
 
 def work_directories
