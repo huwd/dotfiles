@@ -39,6 +39,7 @@ zstyle ':prezto:load' pmodule \
   'syntax-highlighting' \
   'history-substring-search' \
   'ssh' \
+  'tmux' \
   'prompt'
 
 #
@@ -103,6 +104,7 @@ zstyle ':prezto:module:ssh-agent' identities 'id_rsa'
 
 # Auto set the tab and window titles.
 zstyle ':prezto:module:terminal' auto-title 'yes'
+zstyle ':prezto:module:tmux:iterm' integrate 'yes'
 
 #
 # Tmux
