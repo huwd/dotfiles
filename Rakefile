@@ -145,13 +145,6 @@ DEPENDENCIES = {
   ]
 }.freeze
 
-## @TODO consider adding:
-# ctags
-# hub
-# reattach-to-user-namespace
-# the_silver_searcher
-# ghi
-
 def needs_migration_to_vundle?
   File.exist? File.join('nvim', 'bundle', 'tpope-vim-pathogen')
 end

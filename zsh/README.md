@@ -289,3 +289,9 @@ alias brewu='brew update && brew upgrade && brew cleanup && brew doctor'
 ```
 
 > will evaluate these, currently i don't have the muscle memory for them
+
+Evaluate Install
+----------------
+
+[reattach-to-user-namespace](http://www.economyofeffort.com/2013/07/29/reattach-to-user-namespace-the-fix-for-your-tmux-in-os-x-woes/)
+
