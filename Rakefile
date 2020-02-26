@@ -128,6 +128,7 @@ private
 
 DEPENDENCIES = {
   all: %w[
+    asdf
     curl
     git
     neovim
