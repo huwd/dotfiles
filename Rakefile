@@ -133,6 +133,7 @@ DEPENDENCIES = {
     curl
     git
     neovim
+    the_silver_searcher
     tmux
     wget
     zsh
