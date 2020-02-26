@@ -21,9 +21,5 @@ alias gdbx='govuk-docker-run bundle exec'
 alias gdbi='govuk-docker-run bundle install'
 alias gdrake='govuk-docker-run bundle exec rake'
 
-# GDS CLI
-# https://github.com/alphagov/gds-cli
-unalias gds
-
 # Configure GPG for work
 export GPG_TTY=$(tty)
