@@ -37,9 +37,9 @@ task install: %i[submodule_init submodules] do
   #   Rake::Task["install_vundle"].execute
   # end
 
-  if work_customisations? && want_to_install?("work customisations (#{supported_workplaces.join(' ')})")
-    workplace = select_a_workplace_to_install
-    install_files(Dir.glob("work/#{workplace}/*"))
+  if profile_customisations_exist? && want_to_install?("work customisations (#{supported_profiles.join(' ')})")
+    profile = select_a_profile_to_install
+    install_files(Dir.glob("profiles/#{profile}/*"))
   end
 
   Rake::Task['install_prezto'].execute
@@ -149,16 +149,16 @@ def needs_migration_to_vundle?
   File.exist? File.join('nvim', 'bundle', 'tpope-vim-pathogen')
 end
 
-def work_directories
-  Dir.glob("work/*")
+def profiles_directories
+  Dir.glob('profiles/*')
 end
 
-def work_customisations?
-  !work_directories.empty?
+def profile_customisations_exist?
+  !profiles_directories.empty?
 end
 
-def supported_workplaces
-  work_directories.map { |work_dir| work_dir.split('/')[1] }
+def supported_profiles
+  profiles_directories.map { |profile_dir| profile_dir.split('/')[1] }
 end
 
 def platform_deps
@@ -170,25 +170,33 @@ def run(cmd)
   system cmd.to_s unless ENV['DEBUG']
 end
 
-def select_a_workplace_to_install
-  return supported_workplaces[0] if supported_workplaces.count == 1
+def select_a_profile_to_install
+  return ENV['DEFAULT_PROFILE'] if ENV['ASK'] == 'true'
+  return supported_profiles.count == 1 if supported_profiles[0]
+
+  multiple_choice(
+    'Which workplace would you like to install configuration files for: ',
+    supported_profiles
+  )
 end
 
-def multiple_choice(choices)
-  if ENV['ASK'] == 'true'
-    choice_made = false
-    puts "Which workplace would you like to install configuration files for: "
-    puts "Select a number 1 to #{choices.count}"
-    until choice_made
-      choices.each_with_index { |potential_choice, i| puts "  #{i+1}) #{potential_choice}"}
-      choice = STDIN.gets.chomp
-      return choices[choice - 1] if (1..choices.count).include? STDIN.gets.chomp
-      puts "Choice not recognised, try again"
-      puts
-    end
-  else
-    ENV['WORK_DEFAULT']
+def multiple_choice(prompt, options)
+  option_chosen = false
+  until option_chosen
+    list_choices(prompt, options)
+    choice = STDIN.gets.chomp
+    return choices[choice - 1] if (1..choices.count).include? STDIN.gets.chomp
+
+    puts 'options not recognised, try again'
+    puts
   end
+end
+
+def list_choices(prompt, options)
+  puts 'Options'
+  puts '======='
+  options.each.with_index(1) { |option, i| puts "  #{i}) #{option}" }
+  puts prompt
 end
 
 def want_to_install?(section)
