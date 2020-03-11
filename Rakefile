@@ -234,13 +234,13 @@ def update_linux_deps
   puts '======================================================'
   puts 'Updating Packages (apt).'
   puts '======================================================'
-  run 'apt-get update'
+  run 'sudo apt-get update'
   puts
   puts
   puts '======================================================'
   puts 'Installing apt packages...There may be some warnings.'
   puts '======================================================'
-  run "apt-get install -yqq #{platform_deps}"
+  run "sudo apt-get install -yqq #{platform_deps}"
 end
 
 def update_mac_deps
