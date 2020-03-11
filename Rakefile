@@ -127,17 +127,19 @@ private
 
 DEPENDENCIES = {
   all: %w[
-    asdf
     ctags
     curl
     git
     neovim
-    the_silver_searcher
     tmux
     wget
+    silversearcher-ag
     zsh
   ],
-  mac: [''],
+  mac: %w[
+    asdf
+    the_silver_searcher
+  ],
   linux: %w[
     dconf-cli
     fontconfig
