@@ -39,7 +39,6 @@ zstyle ':prezto:load' pmodule \
   'history-substring-search' \
   'ssh' \
   'tmux' \
-  'asdf' \
   'prompt'
 
 #
