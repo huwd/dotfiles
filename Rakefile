@@ -51,33 +51,32 @@ task install: %i[submodule_init submodules] do
   success_msg('installed')
 end
 
-desc "Runs Vundle installer in a clean vim environment"
+desc 'Runs Vundle installer in a clean vim environment'
 task :install_vundle do
-  puts "======================================================"
-  puts "Installing and updating vundles."
-  puts "The installer will now proceed to run PluginInstall to install vundles."
-  puts "======================================================"
-  puts ""
+  puts '======================================================'
+  puts 'Installing and updating vundles.'
+  puts 'The installer will now proceed to run PluginInstall to install vundles.'
+  puts '======================================================'
+  puts ''
 
-  vundle_path = File.join('nvim','bundle', 'vundle')
+  vundle_path = File.join('nvim', 'bundle', 'vundle')
   unless File.exist?(vundle_path)
-    run %{
+    run %(
       cd $HOME/.dotfiles
       git clone https://github.com/gmarik/vundle.git #{vundle_path}
-    }
+    )
   end
 
-  Vundle::update_vundle
+  Vundle.update_vundle
 end
 
 desc 'Updates the installation'
-#TODO: for now, we do the same as install. But it would be nice
-#not to clobber zsh files
+# TODO: for now, we do the same as install. But it would be nice
+# not to clobber zsh files
 task :update do
-  Rake::Task["vundle_migration"].execute if needs_migration_to_vundle?
-  Rake::Task["install"].execute
+  Rake::Task['vundle_migration'].execute if needs_migration_to_vundle?
+  Rake::Task['install'].execute
 end
-
 
 task :submodule_init do
   run %( git submodule update --init --recursive ) unless ENV['SKIP_SUBMODULES']
@@ -99,19 +98,19 @@ task :submodules do
   end
 end
 
-desc "Performs migration from pathogen to vundle"
+desc 'Performs migration from pathogen to vundle'
 task :vundle_migration do
-  puts "======================================================"
-  puts "Migrating from pathogen to vundle vim plugin manager. "
-  puts "This will move the old .vim/bundle directory to"
-  puts ".vim/bundle.old and replacing all your vim plugins with"
-  puts "the standard set of plugins. You will then be able to "
+  puts '======================================================'
+  puts 'Migrating from pathogen to vundle vim plugin manager. '
+  puts 'This will move the old .vim/bundle directory to'
+  puts '.vim/bundle.old and replacing all your vim plugins with'
+  puts 'the standard set of plugins. You will then be able to '
   puts "manage your vim's plugin configuration by editing the "
-  puts "file .vim/vundles.vim"
-  puts "======================================================"
+  puts 'file .vim/vundles.vim'
+  puts '======================================================'
 
-  Dir.glob(File.join('nvim', 'bundle','**')) do |sub_path|
-    run %{git config -f #{File.join('.git', 'config')} --remove-section submodule.#{sub_path}}
+  Dir.glob(File.join('nvim', 'bundle', '**')) do |sub_path|
+    run %(git config -f #{File.join('.git', 'config')} --remove-section submodule.#{sub_path})
     # `git rm --cached #{sub_path}`
     FileUtils.rm_rf(File.join('.git', 'modules', sub_path))
   end
@@ -354,7 +353,7 @@ end
 # Temporary solution until we find a way to allow customization
 # This modifies zshrc to load all of dotfiles' zsh extensions.
 # Eventually dotfiles' zsh extensions should be ported to prezto modules.
-def load_zsh_extensions(file, path="$HOME/.dotfiles/zsh/*.zsh")
+def load_zsh_extensions(file, path = '$HOME/.dotfiles/zsh/*.zsh')
   source_config_code = "for config_file (#{path}) source $config_file"
   target = "#{ENV['HOME']}/.#{file}"
 
@@ -367,54 +366,53 @@ def load_zsh_extensions(file, path="$HOME/.dotfiles/zsh/*.zsh")
   end
 end
 
-
 def install_files(files, method = :symlink)
   files.each do |f|
     file = f.split('/').last
     source = "#{ENV['PWD']}/#{f}"
     target = "#{ENV['HOME']}/.#{file}"
 
-    unless file == "README.md"
-      puts "======================#{file}=============================="
-      puts "Source: #{source}"
-      puts "Target: #{target}"
+    next if file == 'README.md'
 
-      if File.exist?(target) && (!File.symlink?(target) || (File.symlink?(target) && File.readlink(target) != source))
-        puts "[Overwriting] #{target}...leaving original at #{target}.backup..."
-        run %( mv "$HOME/.#{file}" "$HOME/.#{file}.backup" )
-      end
+    puts "======================#{file}=============================="
+    puts "Source: #{source}"
+    puts "Target: #{target}"
 
-      if method == :symlink
-        run %( ln -nfs "#{source}" "#{target}" )
-      else
-        run %( cp -f "#{source}" "#{target}" )
-      end
-
-      load_zsh_extensions(file)
-
-      puts '=========================================================='
-      puts
+    if File.exist?(target) && (!File.symlink?(target) || (File.symlink?(target) && File.readlink(target) != source))
+      puts "[Overwriting] #{target}...leaving original at #{target}.backup..."
+      run %( mv "$HOME/.#{file}" "$HOME/.#{file}.backup" )
     end
+
+    if method == :symlink
+      run %( ln -nfs "#{source}" "#{target}" )
+    else
+      run %( cp -f "#{source}" "#{target}" )
+    end
+
+    load_zsh_extensions(file)
+
+    puts '=========================================================='
+    puts
   end
 end
 
 def run_bundle_config
-  return unless system("which bundle")
+  return unless system('which bundle')
 
   bundler_jobs = number_of_cores - 1
-  puts "======================================================"
-  puts "Configuring Bundlers for parallel gem installation"
-  puts "======================================================"
-  run %{ bundle config --global jobs #{bundler_jobs} }
+  puts '======================================================'
+  puts 'Configuring Bundlers for parallel gem installation'
+  puts '======================================================'
+  run %( bundle config --global jobs #{bundler_jobs} )
   puts
 end
 
 def number_of_cores
-  if RUBY_PLATFORM.downcase.include?("darwin")
-    cores = `sysctl -n hw.ncpu`.chomp
-  else
-    cores = `nproc`.chomp
-  end
+  cores = if RUBY_PLATFORM.downcase.include?('darwin')
+            `sysctl -n hw.ncpu`.chomp
+          else
+            `nproc`.chomp
+          end
   puts
   cores.to_i
 end
