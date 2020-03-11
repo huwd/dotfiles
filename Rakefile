@@ -34,21 +34,6 @@ task install: %i[submodule_init submodules] do
     install_files(Dir.glob('vimify/*'))
   end
 
-  if want_to_install?('ASDF ')
-    # install asdf https://github.com/asdf-vm/asdf.git
-    run %(git clone https://github.com/asdf-vm/asdf.git ~/.dotfiles/asdf)
-
-    run %(ln -nsf ~/.dotfiles/asdf ~/.asdf)
-
-    puts '=================================================='
-    puts ''
-    puts 'Now cd into ~/.asdf'
-    puts 'And checkout the lastest tag with:'
-    puts 'git checkout \"$(git describe --abbrev=0 --tags)\"'
-    puts ''
-    puts '=================================================='
-  end
-
   # if want_to_install?('nvim configuration (highly recommended)')
   #   install_files(Dir.glob('{nvim,vimrc}'))
   #   Rake::Task["install_vundle"].execute

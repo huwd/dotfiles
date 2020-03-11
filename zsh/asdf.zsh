@@ -7,6 +7,8 @@ elif [[ $unamestr == 'Darwin' ]]; then
   platform='darwin'
 fi
 
+ln -nsf ~/.dotfiles/asdf/external ~/.asdf
+
 if [[ $platform == 'linux' ]]; then
   source $HOME/.asdf/asdf.sh
 elif [[ $platform == 'darwin' ]]; then
