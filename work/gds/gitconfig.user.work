@@ -1,0 +1,8 @@
+[user]
+	name = Huw Diprose
+  email = mail@huwdiprose.co.uk
+  signingkey = 00C76F64677767E72393A1E3CA7E0F0C7E29DB40
+[commit]
+	gpgsign = true
+[gpg]
+  program = gpg2
