@@ -2,6 +2,3 @@
 	path = zsh/prezto
 	url = https://github.com/huwd/prezto.git
   ignore = dirty
-[submodule "asdf/external"]
-	path = asdf/external
-	url = https://github.com/asdf-vm/asdf.git
