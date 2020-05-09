@@ -184,7 +184,7 @@ end
 
 def select_a_profile_to_install
   return ENV['DEFAULT_PROFILE'] if ENV['ASK'] == 'true'
-  return supported_profiles.count == 1 if supported_profiles[0]
+  return supported_profiles[0] if supported_profiles.count == 1
 
   multiple_choice(
     'Which workplace would you like to install configuration files for: ',
@@ -196,8 +196,9 @@ def multiple_choice(prompt, options)
   option_chosen = false
   until option_chosen
     list_choices(prompt, options)
-    choice = STDIN.gets.chomp
-    return choices[choice - 1] if (1..choices.count).include? STDIN.gets.chomp
+    choices = (1..options.count).map(&:to_s).zip(options).to_h
+    choice = choices[STDIN.gets.chomp]
+    return choice if !choice.nil?
 
     puts 'options not recognised, try again'
     puts
