@@ -2,3 +2,6 @@
 	path = zsh/prezto
 	url = https://github.com/huwd/prezto.git
   ignore = dirty
+[submodule "rbenv"]
+	path = rbenv
+	url = git@github.com:rbenv/rbenv.git
