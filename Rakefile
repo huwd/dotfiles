@@ -25,10 +25,14 @@ task install: %i[submodule_init submodules] do
   if want_to_install?('rubygems config (faster/no docs)')
     install_files(Dir.glob('ruby/*'))
     # Install Ruby build
-    if Dir[Dir.glob('rbenv/plugins')].nil?
-      run"mkdir -p #{Dir.glob('rbenv/plugins')}"
+    if Dir.glob('rbenv/plugins').empty?
+      run "mkdir -p rbenv/plugins"
     end
-    run "git clone https://github.com/rbenv/ruby-build.git #{Dir.glob('rbenv/plugins/ruby-build')}"
+    if Dir.glob('rbenv/plugins/ruby-build').empty?
+      run "git clone git@github.com:rbenv/ruby-build.git rbenv/plugins/ruby-build"
+    else
+      run 'git -C "$(rbenv root)"/plugins/ruby-build pull'
+    end
   end
 
   if want_to_install?('a terminal multiplexer')
