@@ -1,6 +1,6 @@
 [user]
   name = Huw Diprose
-  email = huw.diprose@digital.cabinet-office.co.uk
+  email = huw.diprose@digital.cabinet-office.gov.uk
   signingkey = A787B9A75D0C8AD8F44234A8CF0BFA0279059293
 [commit]
   gpgsign = true
