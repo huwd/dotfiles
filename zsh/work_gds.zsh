@@ -23,3 +23,4 @@ alias gdrake='govuk-docker-run bundle exec rake'
 
 # Configure GPG for work
 export GPG_TTY=$(tty)
+
