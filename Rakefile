@@ -43,10 +43,10 @@ task install: %i[submodule_init submodules] do
     install_files(Dir.glob('vimify/*'))
   end
 
-  # if want_to_install?('nvim configuration (highly recommended)')
-  #   install_files(Dir.glob('{nvim,vimrc}'))
-  #   Rake::Task["install_vundle"].execute
-  # end
+  if want_to_install?('nvim configuration (highly recommended)')
+    install_files(Dir.glob('{nvim,vimrc}'))
+    Rake::Task["install_vundle"].execute
+  end
 
   if profile_customisations_exist? && want_to_install?("work customisations (#{supported_profiles.join(' ')})")
     profile = select_a_profile_to_install
