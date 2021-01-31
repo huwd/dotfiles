@@ -1,0 +1,11 @@
+function git-history() {
+  local since=$1
+  for d in *; do
+    if [[ -e $d/.git ]]; then
+      pushd $d;
+      local repo=$(printf '%-16s' "$d")
+      git log --since=$since --pretty=format:"${repo:0:16} %ai (%h):  %s" --author='Huw Diprose' --all
+      popd
+    fi
+  done
+}
