@@ -21,6 +21,3 @@ alias gdbx='govuk-docker-run bundle exec'
 alias gdbi='govuk-docker-run bundle install'
 alias gdrake='govuk-docker-run bundle exec rake'
 
-# Configure GPG for work
-export GPG_TTY=$(tty)
-
