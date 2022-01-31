@@ -20,6 +20,7 @@ _tmuxinator() {
   return
 }
 
+alias tx=tmuxinator
 
 # Local Variables:
 # mode: Shell-Script
