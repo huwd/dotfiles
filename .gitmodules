@@ -7,4 +7,4 @@
 	url = git@github.com:rbenv/rbenv.git
 [submodule "nvim/bundle/vundle"]
 	path = nvim/bundle/vundle
-	url = https://github.com/gmarik/vundle.git
+	url = git@github.com:VundleVim/Vundle.vim.git
