@@ -1,10 +1,10 @@
 [submodule "zsh/prezto"]
 	path = zsh/prezto
-	url = https://github.com/huwd/prezto.git
+	url = git@github.com:sorin-ionescu/prezto.git
   ignore = dirty
 [submodule "rbenv"]
 	path = rbenv
 	url = git@github.com:rbenv/rbenv.git
 [submodule "nvim/bundle/vundle"]
 	path = nvim/bundle/vundle
-	url = https://github.com/gmarik/vundle.git
+	url = git@github.com:VundleVim/Vundle.vim.git
