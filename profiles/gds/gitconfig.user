@@ -4,3 +4,5 @@
   signingkey = 33457759CDB6F53D
 [commit]
   gpgsign = true
+[gpg]
+  format = ssh

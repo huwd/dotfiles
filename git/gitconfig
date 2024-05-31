@@ -128,3 +128,9 @@
 	gpgsign = true
 [init]
 	defaultBranch = main
+[gpg "ssh"]
+	defaultKeyCommand = ssh-add -L
+[tag]
+	gpgsign = true
+[gpg]
+	format = ssh
