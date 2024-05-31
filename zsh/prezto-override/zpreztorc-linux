@@ -79,7 +79,7 @@ zstyle ':prezto:module:prompt' theme 'agnoster'
 zstyle ':prezto:module:ssh-agent' forwarding 'yes'
 
 # Set ssh-agent identities to load.
-zstyle ':prezto:module:ssh-agent' identities 'id_rsa'
+zstyle ':prezto:module:ssh-agent' identities 'id_ed25519'
 
 #
 # Syntax Highlighting
