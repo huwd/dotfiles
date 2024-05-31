@@ -33,7 +33,6 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'completion' \
   'git' \
-  'gpg' \
   'ruby' \
   'syntax-highlighting' \
   'history-substring-search' \
@@ -72,8 +71,6 @@ zstyle ':prezto:module:prompt' theme 'agnoster'
 #
 
 # Enable SSH-Agent protocol emulation.
-zstyle ':prezto:module:gpg-agent' ssh-support 'yes'
-
 #
 # SSH-Agent
 #
