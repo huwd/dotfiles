@@ -1,7 +1,7 @@
 [user]
   name = Huw Diprose
   email = huw.diprose@digital.cabinet-office.gov.uk
-  signingkey = 33457759CDB6F53D
+  signingkey = ~/.ssh/id_ed25519
 [commit]
   gpgsign = true
 [gpg]
