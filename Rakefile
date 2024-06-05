@@ -332,7 +332,7 @@ def override_preztorc
 end
 
 def install_term_theme
-  install_theme_linux_term if linux?
+  # install_theme_linux_term if linux?
   install_theme_iterm if mac?
 end
 
